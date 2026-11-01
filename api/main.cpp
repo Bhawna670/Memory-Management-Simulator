@@ -411,10 +411,15 @@ void registerRoutes(httplib::Server& server) {
 
 int main() {
     httplib::Server server;
+    // Serve the browser frontend from the public directory.
+    if (!server.set_mount_point("/", "./public")) {
+        std::cerr << "Failed to mount public directory.\n";
+        return 1;
+    }
 
     registerRoutes(server);
 
-    int port = 8080;
+    int port = portEnv ? std::stoi(portEnv) : 8080;
 
     if (const char* portEnv = std::getenv("PORT")) {
         try {

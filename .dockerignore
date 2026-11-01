@@ -1,0 +1,9 @@
+
+.git
+.github
+build/
+cmake-build-*/
+.vscode/
+.idea/
+.DS_Store
+*.log

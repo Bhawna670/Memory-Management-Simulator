@@ -27,29 +27,29 @@ endfunction()
 # ---- Core library: every module except main.cpp --------------------------
 # Later checkpoints append their sources to this list.
 add_library(memsim_core STATIC
-    src/MemoryBlock.cpp
-    src/ProcessRegistry.cpp
-    src/PlacementStrategy.cpp
-    src/FirstFit.cpp
-    src/BestFit.cpp
-    src/WorstFit.cpp
-    src/MemoryAllocator.cpp
-    src/FragmentationAnalyzer.cpp
-    src/PageReplacement.cpp
-    src/FIFO.cpp
-    src/LRU.cpp
-    src/Optimal.cpp
-    src/PageReplacementSimulator.cpp
-    src/PerformanceAnalyzer.cpp
-    src/InputValidator.cpp
-    src/TablePrinter.cpp
-    src/CliApp.cpp
+    MemoryManagementSimulator/src/MemoryBlock.cpp
+    MemoryManagementSimulator/src/ProcessRegistry.cpp
+    MemoryManagementSimulator/src/PlacementStrategy.cpp
+    MemoryManagementSimulator/src/FirstFit.cpp
+    MemoryManagementSimulator/src/BestFit.cpp
+    MemoryManagementSimulator/src/WorstFit.cpp
+    MemoryManagementSimulator/src/MemoryAllocator.cpp
+    MemoryManagementSimulator/src/FragmentationAnalyzer.cpp
+    MemoryManagementSimulator/src/PageReplacement.cpp
+    MemoryManagementSimulator/src/FIFO.cpp
+    MemoryManagementSimulator/src/LRU.cpp
+    MemoryManagementSimulator/src/Optimal.cpp
+    MemoryManagementSimulator/src/PageReplacementSimulator.cpp
+    MemoryManagementSimulator/src/PerformanceAnalyzer.cpp
+    MemoryManagementSimulator/src/InputValidator.cpp
+    MemoryManagementSimulator/src/TablePrinter.cpp
+    MemoryManagementSimulator/src/CliApp.cpp
 )
 target_include_directories(memsim_core PUBLIC include)
 memsim_configure_target(memsim_core)
 
 # ---- Application ---------------------------------------------------------
-add_executable(memsim src/main.cpp)
+add_executable(memsim MemoryManagementSimulator/src/main.cpp)
 target_link_libraries(memsim PRIVATE memsim_core)
 memsim_configure_target(memsim)
 

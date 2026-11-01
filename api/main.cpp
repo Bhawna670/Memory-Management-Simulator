@@ -419,24 +419,23 @@ int main() {
 
     registerRoutes(server);
 
-    int port = portEnv ? std::stoi(portEnv) : 8080;
+    
+    int port = 8080;
 
     if (const char* portEnv = std::getenv("PORT")) {
         try {
-            std::size_t parsedLength = 0;
-            const int parsedPort = std::stoi(portEnv, &parsedLength);
+            port = std::stoi(portEnv);
 
-            if (parsedLength != std::string(portEnv).size() ||
-                parsedPort < 1 || parsedPort > 65535) {
-                throw std::invalid_argument("Invalid port");
+            if (port <= 0 || port > 65535) {
+                std::cerr << "Invalid PORT environment variable.\n";
+                return 1;
             }
-
-            port = parsedPort;
         } catch (const std::exception&) {
             std::cerr << "Invalid PORT environment variable.\n";
             return 1;
         }
     }
+
 
     std::cout << "API server listening on port " << port << '\n';
 

@@ -1,7 +1,27 @@
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.14)
 
 project(MemoryManagementSimulator VERSION 0.10.0 LANGUAGES CXX)
+
+include(FetchContent)
+
+# HTTP server dependency
+FetchContent_Declare(
+    cpp-httplib
+    GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
+    GIT_TAG v0.18.3
+    GIT_SHALLOW TRUE
+)
+
+# JSON library dependency
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.3
+    GIT_SHALLOW TRUE
+)
+
+FetchContent_MakeAvailable(cpp-httplib nlohmann_json)
 
 # ---- C++ Configuration ---------------------------------------------------
 
@@ -72,6 +92,21 @@ add_library(memsim_core STATIC
 
 target_include_directories(memsim_core PUBLIC include)
 memsim_configure_target(memsim_core)
+
+# ---- REST API ------------------------------------------------------------
+
+add_executable(memsim_api
+    api/main.cpp
+)
+
+target_link_libraries(memsim_api
+    PRIVATE
+    memsim_core
+    httplib::httplib
+    nlohmann_json::nlohmann_json
+)
+
+memsim_configure_target(memsim_api)
 
 # ---- CLI Library ---------------------------------------------------------
 # Contains input validation, table formatting and CLI application logic.

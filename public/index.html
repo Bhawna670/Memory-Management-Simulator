@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Interactive Memory Management Simulator for OS memory allocation and page replacement algorithms."
+    >
+
+    <title>Memory Management Simulator</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <a href="#" class="brand">
+                <span class="brand-icon">M</span>
+                <span>
+                    <strong>MemorySim</strong>
+                    <small>Operating Systems Lab</small>
+                </span>
+            </a>
+
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="#allocation">Memory Allocation</a>
+                <a href="#paging">Page Replacement</a>
+            </nav>
+
+            <div class="api-status">
+                <span id="status-indicator" class="status-dot"></span>
+                <span id="status-text">Checking API...</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-content">
+                <span class="eyebrow">INTERACTIVE OS SIMULATOR</span>
+
+                <h1>Understand Memory Management.</h1>
+
+                <p>
+                    Simulate memory allocation strategies and page replacement
+                    algorithms. Compare performance, analyze fragmentation,
+                    and understand how operating systems manage memory.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#allocation" class="button button-primary">
+                        Explore Simulator
+                    </a>
+                    <a href="#paging" class="button button-secondary">
+                        Page Replacement
+                    </a>
+                </div>
+
+                <div class="algorithm-tags">
+                    <span>First Fit</span>
+                    <span>Best Fit</span>
+                    <span>Worst Fit</span>
+                    <span>FIFO</span>
+                    <span>LRU</span>
+                    <span>Optimal</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="container overview">
+            <article class="overview-card">
+                <span class="overview-icon">01</span>
+                <div>
+                    <h3>Memory Allocation</h3>
+                    <p>Compare placement strategies and fragmentation.</p>
+                </div>
+            </article>
+
+            <article class="overview-card">
+                <span class="overview-icon">02</span>
+                <div>
+                    <h3>Page Replacement</h3>
+                    <p>Analyze page faults, hits, and replacements.</p>
+                </div>
+            </article>
+
+            <article class="overview-card">
+                <span class="overview-icon">03</span>
+                <div>
+                    <h3>Performance Analysis</h3>
+                    <p>Evaluate algorithms using measurable metrics.</p>
+                </div>
+            </article>
+        </section>
+
+        <!-- MEMORY ALLOCATION -->
+        <section id="allocation" class="section container">
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">MODULE 01</span>
+                    <h2>Memory Allocation Simulator</h2>
+                    <p>
+                        Compare First Fit, Best Fit, and Worst Fit using
+                        the same memory configuration and workload.
+                    </p>
+                </div>
+
+                <span class="module-badge">Allocation</span>
+            </div>
+
+            <div class="simulator-layout">
+                <div class="panel input-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Simulation Configuration</h3>
+                            <p>Configure memory and workload events.</p>
+                        </div>
+                    </div>
+
+                    <form id="allocation-form">
+                        <div class="form-group">
+                            <label for="block-sizes">
+                                Memory Block Sizes
+                            </label>
+
+                            <input
+                                type="text"
+                                id="block-sizes"
+                                value="100, 500, 200, 300, 600"
+                                placeholder="100, 500, 200, 300, 600"
+                                required
+                            >
+
+                            <small>
+                                Enter positive integers separated by commas.
+                            </small>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="form-group">
+                            <label>Workload Events</label>
+
+                            <div class="event-builder">
+                                <div class="form-group">
+                                    <label for="event-type">Event Type</label>
+                                    <select id="event-type">
+                                        <option value="allocate">Allocate</option>
+                                        <option value="deallocate">Deallocate</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="process-id">Process ID</label>
+                                    <input
+                                        type="number"
+                                        id="process-id"
+                                        min="1"
+                                        value="1"
+                                    >
+                                </div>
+
+                                <div class="form-group" id="size-group">
+                                    <label for="process-size">
+                                        Memory Size
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="process-size"
+                                        min="1"
+                                        value="212"
+                                    >
+                                </div>
+                            </div>
+
+                            <button
+                                type="button"
+                                id="add-event"
+                                class="button button-secondary button-full"
+                            >
+                                + Add Event
+                            </button>
+                        </div>
+
+                        <div class="event-list-container">
+                            <div class="event-list-header">
+                                <strong>Current Workload</strong>
+                                <button
+                                    type="button"
+                                    id="clear-events"
+                                    class="text-button"
+                                >
+                                    Clear all
+                                </button>
+                            </div>
+
+                            <div id="event-list" class="event-list">
+                                <p class="empty-message">
+                                    No events added yet.
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            id="run-allocation"
+                            class="button button-primary button-full"
+                        >
+                            Run Allocation Comparison
+                        </button>
+                    </form>
+                </div>
+
+                <div class="panel results-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Allocation Results</h3>
+                            <p>Performance comparison across algorithms.</p>
+                        </div>
+
+                        <span class="result-label">LIVE RESULTS</span>
+                    </div>
+
+                    <div id="allocation-message" class="message hidden"></div>
+
+                    <div id="allocation-results">
+                        <div class="empty-state">
+                            <div class="empty-icon">▦</div>
+                            <h3>Awaiting Simulation</h3>
+                            <p>
+                                Configure your memory blocks and workload,
+                                then run the comparison.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE REPLACEMENT -->
+        <section id="paging" class="section container">
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">MODULE 02</span>
+                    <h2>Page Replacement Simulator</h2>
+                    <p>
+                        Compare FIFO, LRU, and Optimal page replacement
+                        algorithms using a reference string.
+                    </p>
+                </div>
+
+                <span class="module-badge">Paging</span>
+            </div>
+
+            <div class="simulator-layout">
+                <div class="panel input-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Simulation Configuration</h3>
+                            <p>Configure frames and page references.</p>
+                        </div>
+                    </div>
+
+                    <form id="paging-form">
+                        <div class="form-group">
+                            <label for="frame-count">
+                                Number of Frames
+                            </label>
+
+                            <input
+                                type="number"
+                                id="frame-count"
+                                min="1"
+                                value="3"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="references">
+                                Page Reference String
+                            </label>
+
+                            <textarea
+                                id="references"
+                                rows="4"
+                                placeholder="7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2"
+                                required
+                            >7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2</textarea>
+
+                            <small>
+                                Enter non-negative page numbers separated
+                                by commas.
+                            </small>
+                        </div>
+
+                        <button
+                            type="submit"
+                            id="run-paging"
+                            class="button button-primary button-full"
+                        >
+                            Run Page Replacement
+                        </button>
+                    </form>
+
+                    <div class="info-card">
+                        <h4>Algorithm Overview</h4>
+
+                        <ul>
+                            <li><strong>FIFO:</strong> Replaces the oldest page.</li>
+                            <li><strong>LRU:</strong> Replaces the least recently used page.</li>
+                            <li><strong>Optimal:</strong> Replaces the page needed farthest in the future.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel results-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Page Replacement Results</h3>
+                            <p>Fault and hit analysis.</p>
+                        </div>
+
+                        <span class="result-label">LIVE RESULTS</span>
+                    </div>
+
+                    <div id="paging-message" class="message hidden"></div>
+
+                    <div id="paging-results">
+                        <div class="empty-state">
+                            <div class="empty-icon">▤</div>
+                            <h3>Awaiting Simulation</h3>
+                            <p>
+                                Configure your frame count and reference
+                                string, then run the simulation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div>
+                <strong>MemorySim</strong>
+                <p>Memory Management Simulator · C++17</p>
+            </div>
+
+            <p>Built for Operating Systems learning and experimentation.</p>
+        </div>
+    </footer>
+</body>
+</html>
